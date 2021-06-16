@@ -1,7 +1,7 @@
 
 public class Human extends Character {
 	
-	int cardCount;
+	private int cardCount;
 	
 	Human(String name, int x, int y, int z) {
 		super();
