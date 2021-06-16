@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class JurassicParkDanger {
 
-	public static ArrayList<Hexagon> GenerateBoard()
+public class JurassicParkDanger {
+		public static ArrayList<Hexagon> GenerateBoard()
 	{
 		//createGameBoard();
 		//Create each hexagon piece
@@ -107,12 +107,12 @@ public class JurassicParkDanger {
 								for (Hexagon hex : centerHexagonArray)
 								{
 									//If a hex doesn't have coordinates yet, assign them then break out of the loop
-									if (hex.hasCoordinates == false)
+									if (hex.getHasCoordinates() == false)
 									{
-										hex.x = i;
-										hex.y = j;
-										hex.z = k;
-										hex.hasCoordinates = true;
+										hex.setX(i);
+										hex.setY(j);
+										hex.setZ(k);
+										hex.setHasCoordinates(true);
 										break;
 									}
 								}
@@ -124,12 +124,12 @@ public class JurassicParkDanger {
 							for (Hexagon hex : perimeterHexagonArray)
 							{
 								//If a hex doesn't have coordinates yet, assign them then break out of the loop
-								if (hex.hasCoordinates == false)
+								if (hex.getHasCoordinates() == false)
 								{
-									hex.x = i;
-									hex.y = j;
-									hex.z = k;
-									hex.hasCoordinates = true;
+									hex.setX(i);
+									hex.setY(j);
+									hex.setZ(k);
+									hex.setHasCoordinates(true);
 									break;
 								}
 							}
@@ -141,17 +141,17 @@ public class JurassicParkDanger {
 		//Finds the perimeter hexes in the human victory locations and renames them
 		for (Hexagon hex : hexagonArray)
 		{
-			if (hex.x == -2 && hex.y == 0 && hex.z == 2)
+			if (hex.getX() == -2 && hex.getY() == 0 && hex.getZ() == 2)
 			{
-				hex.name = "Control Center";
+				hex.setName("Control Center");
 			}
-			else if (hex.x == 1 && hex.y == -2 && hex.z == 1)
+			else if (hex.getX() == 1 && hex.getY() == -2 && hex.getZ() == 1)
 			{
-				hex.name = "Visitor's Center";
+				hex.setName("Visitor's Center");
 			}
-			else if (hex.x == 2 && hex.y == 0 && hex.z == -2)
+			else if (hex.getX() == 2 && hex.getY() == 0 && hex.getZ() == -2)
 			{
-				hex.name = "Maintenance Shed";
+				hex.setName("Maintenance Shed");
 			}
 		}
 		return hexagonArray;
@@ -186,12 +186,50 @@ public class JurassicParkDanger {
 		{
 		for (Hexagon hex : hexArray)
 			{
-				if (a.x == hex.x && a.y == hex.y && a.z == hex.z)
+				if (a.x == hex.getX() && a.y == hex.getY() && a.z == hex.getZ())
 				{
-					a.location = hex;
+					a.setLocation(hex);
 				}
 			}
 		}
+		
+		Character raptor = new Character();
+		Character trex = new Character();
+		Character dilo = new Character();
+		
+		//Iterate through the hex array and place the dinosaurs
+		for (Hexagon hex : hexArray)
+		
+		{
+			if (hex.toString().contains("dilo"))
+			{
+				dilo.name = "Dilophosaurus";
+				dilo.setLocation(hex);
+				dilo.x = hex.getX();
+				dilo.y = hex.getY();
+				dilo.z = hex.getZ();
+			}
+			else if (hex.toString().contains("trex"))
+			{
+				trex.name = "Tyranasaurus Rex";
+				trex.setLocation(hex);
+				trex.x = hex.getX();
+				trex.y = hex.getY();
+				trex.z = hex.getZ();
+			}
+			else if (hex.toString().contains("raptor"))
+			{
+				raptor.name = "Velociraptor";
+				raptor.setLocation(hex);
+				raptor.x = hex.getX();
+				raptor.y = hex.getY();
+				raptor.z = hex.getZ();
+			}
+		}
+		
+		characterArray.add(dilo);
+		characterArray.add(trex);
+		characterArray.add(raptor);
 		
 		return characterArray;
 	}
@@ -199,18 +237,18 @@ public class JurassicParkDanger {
 	//Rotates the hex by assigning the side value one value forward (Rotates *left*)
 	public static void SingleSpin(Hexagon a)
 	{
-		String side1String = a.side1.name();
-		String side2String = a.side2.name();
-		String side3String = a.side3.name();
-		String side4String = a.side4.name();
-		String side5String = a.side5.name();
-		String side6String = a.side6.name();
-		a.side1 = SideType.valueOf(side2String);
-		a.side2 = SideType.valueOf(side3String);
-		a.side3 = SideType.valueOf(side4String);
-		a.side4 = SideType.valueOf(side5String);
-		a.side5 = SideType.valueOf(side6String);
-		a.side6 = SideType.valueOf(side1String);
+		String side1String = a.getSide1().name();
+		String side2String = a.getSide2().name();
+		String side3String = a.getSide3().name();
+		String side4String = a.getSide4().name();
+		String side5String = a.getSide5().name();
+		String side6String = a.getSide6().name();
+		a.setSide1(SideType.valueOf(side2String));
+		a.setSide2(SideType.valueOf(side3String));
+		a.setSide3(SideType.valueOf(side4String));
+		a.setSide4(SideType.valueOf(side5String));
+		a.setSide5(SideType.valueOf(side6String));
+		a.setSide6(SideType.valueOf(side1String));
 	}
 	
 	//Rotates the hex a random number of times by calling SingleSpin a random number of times (0-6)
@@ -224,63 +262,15 @@ public class JurassicParkDanger {
 		}
 	}
 	
-	//Move the character based on direction input
-	//Update x/y/z based on direction
-	//Hold current location in a placeholder
-	public static void Move(int i, Character a, ArrayList<Hexagon> hexArray)
-	{
-		String placeholderLocation = a.location.name;
-		
-		switch (i)
-		{
-			case 1:
-				a.x+=1;
-				a.z-=1;
-				break;
-			case 2:
-				a.y+=1;
-				a.z-=1;
-				break;
-			case 3:
-				a.x-=1;
-				a.y+=1;
-				break;
-			case 4:
-				a.x-=1;
-				a.z+=1;
-				break;
-			case 5:
-				a.y-=1;
-				a.z+=1;
-				break;
-			case 6:
-				a.x+=1;
-				a.y-=1;
-				break;
-			default:
-				System.out.println("Invalid direction");
-		}
-		
-		for (Hexagon hex : hexArray)
-		{
-			if (a.x == hex.x && a.y == hex.y && a.z == hex.z)
-			{
-				a.location = hex;
-			}
-		}
-		if (placeholderLocation == a.location.name)
-		{
-			a.x = a.location.x;
-			a.y = a.location.y;
-			a.z = a.location.z;
-			System.out.println("Invalid direction");
-		}
-	}
+	
 	
 	public static void main(String[] args) {
 		
+		
 		ArrayList<Hexagon> hexagonArray = new ArrayList<Hexagon>(); //Create hexagon arraylist to hold generated board elements
 		hexagonArray.addAll(GenerateBoard()); //Generate board and return generated board, which is an arraylist of hexagons
+		//GameBoard gameBoard = new GameBoard(GenerateBoard());
+		//System.out.println(gameBoard.toString());
 		
 		/*
 		for (Hexagon a : hexagonArray)
@@ -289,8 +279,9 @@ public class JurassicParkDanger {
 		*/
 		
 		
-		ArrayList<Character> characterArray = new ArrayList<Character>();
-		characterArray.addAll(GenerateCharacters(hexagonArray));
+		//ArrayList<Character> characterArray = new ArrayList<Character>();
+		//characterArray.addAll(GenerateCharacters(hexagonArray));
+		CharacterList characterList = new CharacterList(GenerateCharacters(hexagonArray));
 		
 		/*
 		for (Character a : characterArray)
@@ -299,49 +290,18 @@ public class JurassicParkDanger {
 		}
 		*/
 		
-		//Null hexagon so that the dinosaurs have somewhere to be when created.
-		Hexagon nullHex = new Hexagon("nullHex", SideType.BORDER, SideType.BORDER, SideType.BORDER, SideType.BORDER, SideType.BORDER, SideType.BORDER);
-		Character raptor = new Character("", nullHex);
-		Character trex = new Character("", nullHex);;
-		Character dilo = new Character("", nullHex);;
 		
-		//Iterate through the hex array and create and place the dinosaurs
-		for (Hexagon hex : hexagonArray)
-		{
-			if (hex.toString().contains("dilo"))
-			{
-				dilo.name = "Dilophosaurus";
-				dilo.location = hex;
-				dilo.x = hex.x;
-				dilo.y = hex.y;
-				dilo.z = hex.z;
-			}
-			else if (hex.toString().contains("trex"))
-			{
-				trex.name = "Tyranasaurus Rex";
-				trex.location = hex;
-				trex.x = hex.x;
-				trex.y = hex.y;
-				trex.z = hex.z;
-			}
-			else if (hex.toString().contains("raptor"))
-			{
-				raptor.name = "Velociraptor";
-				raptor.location = hex;
-				raptor.x = hex.x;
-				raptor.y = hex.y;
-				raptor.z = hex.z;
-			}
-		}
 		
-		System.out.println(raptor.toString());
-		Move(4, raptor, hexagonArray);
-		System.out.println(raptor.toString());
-		System.out.println(trex.toString());
-		Move(4, trex, hexagonArray);
-		System.out.println(trex.toString());
-		System.out.println(dilo.toString());
-		Move(4, dilo, hexagonArray);
-		System.out.println(dilo.toString());
+		System.out.println(characterList.getCharacter("Velociraptor").toString());
+		characterList.getCharacter("Velociraptor").Move(4, hexagonArray);
+		System.out.println(characterList.getCharacter("Velociraptor").toString());
+		System.out.println(characterList.getCharacter("Dilophosaurus").toString());
+		characterList.getCharacter("Dilophosaurus").Move(4, hexagonArray);
+		System.out.println(characterList.getCharacter("Dilophosaurus").toString());
+		System.out.println(characterList.getCharacter("Tyranasaurus Rex").toString());
+		characterList.getCharacter("Tyranasaurus Rex").Move(4, hexagonArray);
+		System.out.println(characterList.getCharacter("Tyranasaurus Rex").toString());
+		
+		
 	}
 }
